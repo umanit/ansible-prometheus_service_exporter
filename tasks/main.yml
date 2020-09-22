@@ -1,0 +1,26 @@
+---
+- include: preflight.yml
+  tags:
+    - service_exporter_install
+    - service_exporter_configure
+    - service_exporter_run
+
+- include: install.yml
+  become: true
+  tags:
+    - service_exporter_install
+
+- include: configure.yml
+  become: true
+  tags:
+    - service_exporter_configure
+
+- name: ensure service_exporter service is started and enabled
+  become: true
+  systemd:
+    daemon_reload: true
+    name: service_exporter
+    state: started
+    enabled: true
+  tags:
+    - service_exporter_run

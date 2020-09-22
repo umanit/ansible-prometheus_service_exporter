@@ -1,0 +1,15 @@
+---
+# handlers file for umanit.prometheus_service_exporter
+
+- name: restart service exporter
+  become: true
+  systemd:
+    daemon_reload: true
+    name: service_exporter
+    state: restarted
+
+- name: reload service exporter
+  become: true
+  systemd:
+    name: service_exporter
+    state: reloaded

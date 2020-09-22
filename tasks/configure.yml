@@ -1,0 +1,10 @@
+---
+- name: create systemd service unit
+  template:
+    src: service_exporter.service.j2
+    dest: /etc/systemd/system/service_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart service exporter

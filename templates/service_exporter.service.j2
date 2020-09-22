@@ -1,0 +1,49 @@
+{{ ansible_managed | comment }}
+[Unit]
+Description=Prometheus Service Exporter
+Documentation=https://github.com/tylux/prometheus_service_exporter
+After=network.target
+StartLimitInterval=0
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+PIDFile=/var/run/service_exporter.pid
+User=service-exp
+Group=service-exp
+PermissionsStartOnly=true
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/service_exporter \
+  {% if service_exporter_service_list is defined and service_exporter_service_list is iterable -%}
+  -s {{ service_exporter_service_list|join(',') }}
+  {% endif -%}
+
+Environment=Debug=false
+Environment=ListenAddress={{ service_exporter_web_listen_address }}
+Environment=MetricsPath=/metrics
+
+SyslogIdentifier=service_exporter
+KillMode=process
+Restart=always
+RestartSec=5
+
+LockPersonality=true
+NoNewPrivileges=true
+MemoryDenyWriteExecute=true
+PrivateTmp=true
+ProtectHome=true
+RemoveIPC=true
+RestrictSUIDSGID=true
+
+{% if service_exporter_systemd_version | int >= 232 %}
+AmbientCapabilities=CAP_NET_RAW
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=yes
+ProtectSystem=strict
+{% else %}
+ProtectSystem=full
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

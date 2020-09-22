@@ -1,0 +1,20 @@
+---
+- name: create service_exporter system group
+  group:
+    name: service-exp
+    system: true
+    state: present
+
+- name: create service_exporter system user
+  user:
+    name: service-exp
+    system: true
+    shell: "/sbin/nologin"
+    group: service-exp
+    createhome: false
+
+- name: download service exporter binary to local folder
+  get_url:
+    url: https://github.com/tylux/prometheus_service_exporter/releases/download/{{ service_exporter_version }}/prometheus_service_exporter
+    dest: "/usr/local/bin/service_exporter"
+    mode: 0755

@@ -1,0 +1,13 @@
+---
+# defaults file for umanit.prometheus_service_exporter
+service_exporter_version: 1.4
+
+service_exporter_web_listen_address: "127.0.0.1:9199"
+
+# List of service to monitor (no default value, if not set exporter not installed)
+#service_exporter_service_list: []
+
+# Exemple : 
+#service_exporter_service_list:
+#  - ssh.service
+#  - apache2.service
