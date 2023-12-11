@@ -1,16 +1,16 @@
 ---
-- include: preflight.yml
+- include_tasks: preflight.yml
   tags:
     - service_exporter_install
     - service_exporter_configure
     - service_exporter_run
 
-- include: install.yml
+- include_tasks: install.yml
   become: true
   tags:
     - service_exporter_install
 
-- include: configure.yml
+- include_tasks: configure.yml
   become: true
   tags:
     - service_exporter_configure
